@@ -1,50 +1,20 @@
-import { nanoid } from "nanoid";
-import React, { useState } from "react";
 import "./TaskManager.css";
+import { useTaskManager } from "../hooks/useTaskManager";
 
-interface Task{
-    id: string;
-    title: string;
-}
 // TODO: create custom hook to manage task state
 export const TaskManager: React.FC = () => {
-  const [title, setTitle] = useState<string>("");
-  const [searchKeyword, setSearchKeyword] = useState<string>("");
-  const [tasks, setTasks] = useState<Task[]>([]);
-
-  // remove task from list
-  const completeTask = (id: string) => {
-    setTasks(tasks.filter((task) => task.id !== id));
-  };
-
-  const updateTask = (id: string, taskUpdate: string) => {
-    const updatedTasks = tasks.map((task) =>
-    task.id === id ? { ...task, title: taskUpdate } : task);
-
-    setTasks(updatedTasks);
-  };
-
-  const addTask = () : void => {
-    if (title.length < 1) {
-      return;
-    }
-
-    const newTask: Task = {
-      // using nanoid to generate unique id
-      id: nanoid(),
-      title,
-    };
-    setTasks((prev) => prev.concat(newTask));
-    setTitle("");
-  };
-
-  const handleSearch = (ev: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchKeyword(ev.target.value);
-  };
-
-  const filteredTasks = tasks.filter((task) =>
-    task.title.toLowerCase().includes(searchKeyword.toLowerCase()),
-  );
+    const {
+        title,
+        setTitle,
+        searchKeyword,
+        setSearchKeyword,
+        tasks,
+        completeTask,
+        updateTask,
+        addTask,
+        handleSearch,
+        filteredTasks,
+      } = useTaskManager();
 
   return (
     <div className="container">
